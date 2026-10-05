@@ -1,0 +1,25 @@
+{
+  "name": "cab-and-travels-management-system",
+  "version": "1.0.0",
+  "description": "Full-stack Cab & Travels Management System (React.js, Tailwind CSS, Node.js, Express.js)",
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"cyan,green\" \"npm run start:backend\" \"npm run start:frontend\"",
+    "start": "npm run dev",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "cab-management",
+    "travels",
+    "fleet-management",
+    "express",
+    "react",
+    "tailwind"
+  ],
+  "author": "Apex Cabs",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
