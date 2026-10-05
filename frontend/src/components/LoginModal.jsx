@@ -9,29 +9,21 @@ import {
   Eye,
   EyeOff,
   KeyRound,
-  CheckCircle2,
-  Sparkles
+  CheckCircle2
 } from 'lucide-react';
 
 export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADMIN' }) => {
   const [selectedRole, setSelectedRole] = useState(initialRole || 'ADMIN');
-  const [password, setPassword] = useState('admin123');
-  const [showPassword, setShowPassword] = useState(true);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (initialRole) {
       setSelectedRole(initialRole);
-      const defaults = {
-        ADMIN: 'admin123',
-        MANAGER: 'manager123',
-        DRIVER: 'driver123'
-      };
-      if (defaults[initialRole]) {
-        setPassword(defaults[initialRole]);
-      }
     }
+    setPassword('');
     setError('');
   }, [initialRole, isOpen]);
 
@@ -43,30 +35,27 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
       label: 'Admin / Owner',
       user: 'R. Rajasekaran',
       icon: Shield,
-      tag: 'Full Access',
-      defaultPassword: 'admin123'
+      tag: 'Full Access'
     },
     {
       id: 'MANAGER',
       label: 'Fleet Operations',
       user: 'Kavitha Manickam',
       icon: Briefcase,
-      tag: 'Ops Desk',
-      defaultPassword: 'manager123'
+      tag: 'Ops Desk'
     },
     {
       id: 'DRIVER',
       label: 'Senior Captain',
       user: 'Murugan Selvam',
       icon: Compass,
-      tag: 'Captain View',
-      defaultPassword: 'driver123'
+      tag: 'Captain View'
     }
   ];
 
   const handleSelectRole = (role) => {
     setSelectedRole(role.id);
-    setPassword(role.defaultPassword);
+    setPassword('');
     setError('');
   };
 
@@ -120,14 +109,14 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h3 className="font-black text-base sm:text-lg tracking-tight text-slate-950">
-                  System Login Details
+                  System Portal Login
                 </h3>
                 <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#D31720]/15 text-[#D31720] border border-[#D31720]/30">
-                  Verified
+                  Secure
                 </span>
               </div>
               <p className="text-xs text-slate-600 font-medium italic">
-                Choose an account or verify password to switch persona
+                Choose an account and enter password to switch persona
               </p>
             </div>
           </div>
@@ -142,16 +131,13 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
           </button>
         </div>
 
-        {/* Visible Demo Accounts with Passwords */}
+        {/* Account Selection */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="block text-[11px] font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
               <KeyRound className="w-3.5 h-3.5 text-[#D31720]" />
-              Select Account & View Login Details
+              Select Account
             </label>
-            <span className="text-[10px] text-slate-500 font-medium italic">
-              Click to 1-click autofill
-            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -192,14 +178,6 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
                       {role.user}
                     </span>
                   </div>
-
-                  {/* High Visibility Password Display */}
-                  <div className="w-full mt-1 pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[10px]">
-                    <span className="text-slate-500 font-medium">Pass:</span>
-                    <span className="font-mono font-black text-slate-950 bg-white px-1.5 py-0.5 rounded border border-slate-300 tracking-wider shadow-2xs">
-                      {role.defaultPassword}
-                    </span>
-                  </div>
                 </button>
               );
             })}
@@ -214,14 +192,6 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
               <label className="block text-[11px] font-black uppercase tracking-wider text-slate-700">
                 Password for {currentRoleConfig.user}
               </label>
-              <button
-                type="button"
-                onClick={() => setPassword(currentRoleConfig.defaultPassword)}
-                className="text-[11px] font-bold text-[#D31720] hover:underline flex items-center gap-1"
-              >
-                <Sparkles className="w-3 h-3" />
-                <span>Fill "{currentRoleConfig.defaultPassword}"</span>
-              </button>
             </div>
 
             <div className="relative">
