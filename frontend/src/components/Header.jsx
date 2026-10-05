@@ -69,24 +69,21 @@ export const Header = ({
       label: 'Admin / Owner', 
       icon: Shield, 
       user: 'R. Rajasekaran', 
-      desc: 'Managing Director & Founder',
-      password: 'admin123'
+      desc: 'Managing Director & Founder'
     },
     { 
       id: 'MANAGER', 
       label: 'Fleet Operations', 
       icon: Briefcase, 
       user: 'Kavitha Manickam', 
-      desc: 'Fleet Operations Lead',
-      password: 'manager123'
+      desc: 'Fleet Operations Lead'
     },
     { 
       id: 'DRIVER', 
       label: 'Senior Captain', 
       icon: Compass, 
       user: 'Murugan Selvam', 
-      desc: 'Senior Fleet Captain',
-      password: 'driver123'
+      desc: 'Senior Fleet Captain'
     }
   ];
 
@@ -211,7 +208,7 @@ export const Header = ({
                       <span>Active Login Details</span>
                     </p>
                     <p className="text-[11px] text-slate-500 mt-0.5 italic">
-                      Switch persona or verify credentials
+                      Switch user persona
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -259,12 +256,6 @@ export const Header = ({
                           </div>
                           <p className="text-xs text-slate-900 font-bold mt-0.5">{r.user}</p>
                           <p className="text-[10px] text-slate-500 italic mt-0.5">{r.desc}</p>
-                          <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-slate-600 font-medium">
-                            <span className="text-slate-500">Password:</span>
-                            <span className="font-mono font-bold text-slate-950 bg-white px-2 py-0.5 rounded border border-slate-300 shadow-2xs">
-                              {r.password}
-                            </span>
-                          </div>
                         </div>
                       </button>
                     );
