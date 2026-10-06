@@ -61,25 +61,25 @@ export const Header = ({
     };
   }, [roleDropdownOpen]);
 
-  // Role Personas with credentials
+  // Access Roles: Admin, Manager, Driver
   const roles = [
     { 
       id: 'ADMIN', 
-      label: 'Admin / Owner', 
+      label: 'Admin', 
       icon: Shield, 
       user: 'R. Rajasekaran', 
       desc: 'Managing Director & Founder'
     },
     { 
       id: 'MANAGER', 
-      label: 'Fleet Operations', 
+      label: 'Manager', 
       icon: Briefcase, 
       user: 'Kavitha Manickam', 
       desc: 'Fleet Operations Lead'
     },
     { 
       id: 'DRIVER', 
-      label: 'Senior Captain', 
+      label: 'Driver', 
       icon: Compass, 
       user: 'Murugan Selvam', 
       desc: 'Senior Fleet Captain'
@@ -218,7 +218,7 @@ export const Header = ({
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2.5 p-1.5 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="grid grid-cols-3 gap-2">
                     {roles.map((r) => {
                       const Icon = r.icon;
                       const isActive = currentUser.role === r.id;
@@ -229,16 +229,19 @@ export const Header = ({
                           title={`${r.label} (${r.user})`}
                           aria-label={r.label}
                           className={`
-                            h-11 rounded-lg flex items-center justify-center transition-all duration-200 relative group
+                            py-2.5 px-1.5 rounded-xl flex flex-col items-center justify-center gap-1 transition-all duration-200 relative group cursor-pointer
                             ${isActive 
-                              ? 'bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white shadow-md shadow-[#D31720]/30 scale-100 border border-white/30' 
-                              : 'bg-white hover:bg-slate-100 text-slate-600 hover:text-[#D31720] border border-slate-200/80 shadow-2xs hover:scale-105'
+                              ? 'bg-gradient-to-b from-[#D31720] via-red-600 to-[#9B1017] text-white shadow-md shadow-[#D31720]/40 scale-100 border border-white/30' 
+                              : 'bg-slate-50 hover:bg-red-50/50 text-slate-600 hover:text-[#D31720] border border-slate-200 hover:border-red-200 shadow-2xs hover:scale-105'
                             }
                           `}
                         >
-                          <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
+                          <Icon className={`w-5 h-5 transition-transform group-hover:scale-110 ${isActive ? 'stroke-[2.3] text-white' : 'stroke-[2] text-slate-600 group-hover:text-[#D31720]'}`} />
+                          <span className={`text-[11px] font-black tracking-wide ${isActive ? 'text-white' : 'text-slate-700 group-hover:text-[#D31720]'}`}>
+                            {r.label}
+                          </span>
                           {isActive && (
-                            <span className="absolute bottom-1 w-1 h-1 rounded-full bg-white shadow-xs" />
+                            <span className="w-1 h-1 rounded-full bg-white shadow-xs" />
                           )}
                         </button>
                       );

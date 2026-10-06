@@ -33,24 +33,18 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
   const roleConfigs = [
     {
       id: 'ADMIN',
-      label: 'Admin / Owner',
-      user: 'R. Rajasekaran',
-      icon: Shield,
-      tag: 'Full Access'
+      label: 'Admin',
+      icon: Shield
     },
     {
       id: 'MANAGER',
-      label: 'Fleet Operations',
-      user: 'Kavitha Manickam',
-      icon: Briefcase,
-      tag: 'Ops Desk'
+      label: 'Manager',
+      icon: Briefcase
     },
     {
       id: 'DRIVER',
-      label: 'Senior Captain',
-      user: 'Murugan Selvam',
-      icon: Compass,
-      tag: 'Captain View'
+      label: 'Driver',
+      icon: Compass
     }
   ];
 
@@ -63,7 +57,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!password) {
-      setError('Please enter your account password.');
+      setError('Please enter your password.');
       return;
     }
 
@@ -90,7 +84,10 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 p-5 sm:p-7 shadow-[0_24px_70px_rgba(5,26,45,0.25)] text-slate-900 space-y-5">
+      <div className="w-full max-w-md rounded-3xl bg-white/98 border border-[#D31720]/25 p-6 sm:p-7 shadow-[0_24px_70px_rgba(211,23,32,0.25)] text-slate-900 space-y-5 relative overflow-hidden">
+        {/* Top Accent Line */}
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#D31720] via-red-500 to-[#9B1017]" />
+
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 gap-2">
           <div className="flex items-center gap-3 min-w-0">
@@ -100,14 +97,11 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h3 className="font-black text-base sm:text-lg tracking-tight text-slate-950">
-                  System Portal Login
+                  Switch System Role
                 </h3>
-                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#D31720]/15 text-[#D31720] border border-[#D31720]/30">
-                  Secure
-                </span>
               </div>
-              <p className="text-xs text-slate-600 font-medium italic">
-                Choose an account and enter password to switch persona
+              <p className="text-xs text-slate-500 font-medium italic">
+                Select access role and authenticate
               </p>
             </div>
           </div>
@@ -122,19 +116,14 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
           </button>
         </div>
 
-        {/* Account Selection: ONLY ICONS */}
+        {/* Account Selection: Bigger Icons with Role Name */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="block text-[11px] font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-              <KeyRound className="w-3.5 h-3.5 text-[#D31720]" />
-              Select Role
-            </label>
-            <span className="text-[10px] font-bold text-slate-400 italic">
-              {currentRoleConfig.label}
-            </span>
-          </div>
+          <label className="block text-[11px] font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+            <KeyRound className="w-3.5 h-3.5 text-[#D31720]" />
+            Select Role
+          </label>
 
-          <div className="grid grid-cols-3 gap-2.5 p-1.5 bg-slate-100 rounded-2xl border border-slate-200">
+          <div className="grid grid-cols-3 gap-3">
             {roleConfigs.map((role) => {
               const Icon = role.icon;
               const isSelected = selectedRole === role.id;
@@ -145,15 +134,18 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
                   onClick={() => handleSelectRole(role)}
                   title={role.label}
                   aria-label={role.label}
-                  className={`h-12 rounded-xl flex items-center justify-center transition-all duration-200 relative group ${
+                  className={`py-3.5 px-2 rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer relative group ${
                     isSelected
-                      ? 'bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white shadow-md shadow-[#D31720]/30 scale-100 border border-white/30'
-                      : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-[#D31720] border border-slate-200 shadow-2xs hover:scale-105'
+                      ? 'bg-gradient-to-b from-[#D31720] via-red-600 to-[#9B1017] text-white shadow-[0_8px_20px_rgba(211,23,32,0.45)] border border-white/30 scale-[1.02]'
+                      : 'bg-slate-50 hover:bg-red-50/40 text-slate-600 hover:text-[#D31720] border border-slate-200 hover:border-red-200 shadow-2xs hover:scale-[1.02]'
                   }`}
                 >
-                  <Icon className={`w-5 h-5 transition-transform group-hover:scale-110 ${isSelected ? 'stroke-[2.5]' : 'stroke-2'}`} />
+                  <Icon className={`w-7 h-7 transition-transform group-hover:scale-110 ${isSelected ? 'stroke-[2.3] text-white' : 'stroke-[2] text-slate-600 group-hover:text-[#D31720]'}`} />
+                  <span className={`text-xs font-black tracking-wide ${isSelected ? 'text-white' : 'text-slate-700 group-hover:text-[#D31720]'}`}>
+                    {role.label}
+                  </span>
                   {isSelected && (
-                    <span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
                   )}
                 </button>
               );

@@ -9,44 +9,39 @@ import {
   Car, 
   ArrowRight,
   AlertCircle,
-  KeyRound,
-  CheckCircle2,
-  Sparkles
+  KeyRound
 } from 'lucide-react';
 import { api } from '../api/apiClient';
 
 export const LoginPage = ({ onLoginSuccess }) => {
   const [selectedRole, setSelectedRole] = useState('ADMIN');
-  const [password, setPassword] = useState('admin123');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // 3 Persona roles represented by ONLY ICONS
-  const roleIcons = [
+  // 3 Access Roles: admin, manager, driver (Clean, bigger icons, no hints)
+  const roleConfigs = [
     {
       id: 'ADMIN',
-      icon: Shield,
-      tooltip: 'Administrator / Owner',
-      defaultPass: 'admin123'
+      name: 'Admin',
+      icon: Shield
     },
     {
       id: 'MANAGER',
-      icon: Briefcase,
-      tooltip: 'Fleet Operations Lead',
-      defaultPass: 'manager123'
+      name: 'Manager',
+      icon: Briefcase
     },
     {
       id: 'DRIVER',
-      icon: Compass,
-      tooltip: 'Senior Fleet Captain',
-      defaultPass: 'driver123'
+      name: 'Driver',
+      icon: Compass
     }
   ];
 
-  const handleRoleSelect = (roleId, defPass) => {
+  const handleRoleSelect = (roleId) => {
     setSelectedRole(roleId);
-    setPassword(defPass);
+    setPassword('');
     setError('');
   };
 
@@ -75,71 +70,70 @@ export const LoginPage = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-[#1b0608] to-[#2c080b] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden select-none">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-950 via-[#190406] to-[#2b080a] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden select-none">
       {/* Ambient background glow orbs */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-red-600/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#D31720]/25 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-red-900/15 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Main Login Card */}
-      <div className="w-full max-w-md bg-white/95 backdrop-blur-2xl rounded-3xl border border-white/60 shadow-[0_25px_70px_rgba(0,0,0,0.5),0_0_0_1px_rgba(211,23,32,0.15)] p-6 sm:p-8 relative z-10 animate-in fade-in zoom-in-95 duration-300">
+      {/* Main Luxury Red-Themed Login Box */}
+      <div className="w-full max-w-[430px] bg-white/98 backdrop-blur-3xl rounded-3xl border border-[#D31720]/25 shadow-[0_25px_70px_-12px_rgba(211,23,32,0.35),0_0_0_1px_rgba(211,23,32,0.12)] p-6 sm:p-8 relative z-10 animate-in fade-in zoom-in-95 duration-300 overflow-hidden">
         
+        {/* Top Specular Red Gradient Accent Line */}
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#D31720] via-red-500 to-[#9B1017]" />
+
         {/* Brand Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#D31720] via-red-600 to-[#9B1017] text-white shadow-[0_8px_24px_rgba(211,23,32,0.4)] border border-white/40 mb-3 group transition-transform hover:scale-105">
-            <Car className="w-7 h-7 stroke-[2.5]" />
+        <div className="text-center mt-1 mb-7">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#D31720] via-red-600 to-[#9B1017] text-white shadow-[0_10px_30px_rgba(211,23,32,0.45)] border border-white/40 mb-3.5 transition-transform hover:scale-105">
+            <Car className="w-8 h-8 stroke-[2.5]" />
           </div>
           
           <div className="flex items-center justify-center gap-1.5 leading-none">
             <h1 className="font-black text-2xl tracking-tight text-slate-950">CITY</h1>
             <span className="font-black text-2xl tracking-tight text-[#D31720]">CABS</span>
-            <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-[#D31720]/10 text-[#D31720] border border-[#D31720]/30 ml-1">
-              PRO
-            </span>
           </div>
 
           <p className="text-xs text-slate-500 font-medium italic mt-1.5">
-            Fleet & Travels Operations Gateway
+            Tamil Nadu Fleet Operations & Dispatch Portal
           </p>
         </div>
 
-        {/* Role Selector: ONLY ICONS (No exposed cards or credential details) */}
+        {/* Role Selector: Admin, Manager, Driver with BIGGER ICONS */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2 px-1">
-            <label className="text-[11px] font-black uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
-              <KeyRound className="w-3.5 h-3.5 text-[#D31720]" />
-              <span>Select Access Role</span>
-            </label>
-            <span className="text-[10px] font-bold text-slate-400 italic">
-              {roleIcons.find(r => r.id === selectedRole)?.tooltip}
-            </span>
-          </div>
+          <label className="block text-[11px] font-black uppercase tracking-wider text-slate-600 mb-2.5 px-0.5 flex items-center gap-1.5">
+            <KeyRound className="w-3.5 h-3.5 text-[#D31720]" />
+            <span>Select Access Role</span>
+          </label>
 
-          {/* 3 Role Icons Only */}
-          <div className="grid grid-cols-3 gap-3 p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200/80">
-            {roleIcons.map((role) => {
+          {/* 3 Prominent, Bigger Role Icon Buttons */}
+          <div className="grid grid-cols-3 gap-3">
+            {roleConfigs.map((role) => {
               const Icon = role.icon;
               const isSelected = selectedRole === role.id;
               return (
                 <button
                   key={role.id}
                   type="button"
-                  onClick={() => handleRoleSelect(role.id, role.defaultPass)}
-                  title={role.tooltip}
-                  aria-label={role.tooltip}
+                  onClick={() => handleRoleSelect(role.id)}
                   className={`
-                    relative h-13 rounded-xl flex items-center justify-center transition-all duration-200 group
+                    py-3.5 sm:py-4 px-2 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all duration-200 cursor-pointer relative group
                     ${isSelected 
-                      ? 'bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white shadow-md shadow-[#D31720]/30 scale-100 border border-white/30' 
-                      : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-[#D31720] border border-slate-200/70 shadow-2xs hover:scale-[1.02]'
+                      ? 'bg-gradient-to-b from-[#D31720] via-red-600 to-[#9B1017] text-white shadow-[0_10px_25px_-5px_rgba(211,23,32,0.5),inset_0_1.5px_2px_rgba(255,255,255,0.4)] border border-white/30 scale-[1.02]' 
+                      : 'bg-slate-50 hover:bg-red-50/40 text-slate-600 hover:text-[#D31720] border border-slate-200 hover:border-red-200 shadow-2xs hover:scale-[1.02]'
                     }
                   `}
                 >
-                  <Icon className={`w-5 h-5 transition-transform group-hover:scale-110 ${isSelected ? 'stroke-[2.5]' : 'stroke-2'}`} />
+                  {/* Noticeably bigger icon */}
+                  <Icon className={`w-7 h-7 sm:w-8 sm:h-8 transition-transform group-hover:scale-110 ${isSelected ? 'stroke-[2.3] text-white drop-shadow-sm' : 'stroke-[2] text-slate-600 group-hover:text-[#D31720]'}`} />
                   
-                  {/* Subtle active pip indicator */}
+                  {/* Clean role title text: Admin, Manager, Driver */}
+                  <span className={`text-xs font-black tracking-wide ${isSelected ? 'text-white' : 'text-slate-700 group-hover:text-[#D31720]'}`}>
+                    {role.name}
+                  </span>
+
+                  {/* Active highlight dot */}
                   {isSelected && (
-                    <span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
                   )}
                 </button>
               );
@@ -147,14 +141,14 @@ export const LoginPage = ({ onLoginSuccess }) => {
           </div>
         </div>
 
-        {/* Login Form */}
+        {/* Login Form: Clean, Professional, No Hints/Demo */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-[11px] font-black uppercase tracking-wider text-slate-700 mb-1.5 px-1">
-              Secure Password
+            <label className="block text-[11px] font-black uppercase tracking-wider text-slate-700 mb-1.5 px-0.5">
+              Password
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D31720] pointer-events-none">
                 <Lock className="w-4 h-4" />
               </div>
               <input
@@ -166,13 +160,13 @@ export const LoginPage = ({ onLoginSuccess }) => {
                   if (error) setError('');
                 }}
                 placeholder="Enter password"
-                className="w-full pl-10 pr-11 py-2.5 bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 focus:border-[#D31720] rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#D31720]/20 transition-all shadow-xs"
+                className="w-full pl-10 pr-11 py-3 bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 focus:border-[#D31720] rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#D31720]/20 transition-all shadow-xs"
                 autoComplete="current-password"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
                 title={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -188,11 +182,11 @@ export const LoginPage = ({ onLoginSuccess }) => {
             </div>
           )}
 
-          {/* Submit Button */}
+          {/* Elegant Red Action Button */}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-[#D31720] via-red-600 to-[#9B1017] hover:brightness-105 active:scale-[0.98] text-white font-black text-xs sm:text-sm tracking-wide transition-all shadow-md shadow-[#D31720]/35 border border-white/30 flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#D31720] via-red-600 to-[#9B1017] hover:brightness-105 active:scale-[0.98] text-white font-black text-sm tracking-wide transition-all shadow-[0_10px_25px_rgba(211,23,32,0.4)] border border-white/30 flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer mt-2"
           >
             {submitting ? (
               <span>Authenticating...</span>
@@ -204,17 +198,6 @@ export const LoginPage = ({ onLoginSuccess }) => {
             )}
           </button>
         </form>
-
-        {/* Discreet Quick Switch Indicator */}
-        <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium px-1">
-          <span className="flex items-center gap-1 text-slate-400">
-            <Sparkles className="w-3 h-3 text-[#D31720]" />
-            <span>Role-Based Portal</span>
-          </span>
-          <span className="font-mono text-[10px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
-            Demo: {selectedRole.toLowerCase()}123
-          </span>
-        </div>
       </div>
     </div>
   );
