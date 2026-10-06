@@ -122,16 +122,19 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
           </button>
         </div>
 
-        {/* Account Selection */}
+        {/* Account Selection: ONLY ICONS */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="block text-[11px] font-black uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
               <KeyRound className="w-3.5 h-3.5 text-[#D31720]" />
-              Select Account
+              Select Role
             </label>
+            <span className="text-[10px] font-bold text-slate-400 italic">
+              {currentRoleConfig.label}
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-3 gap-2.5 p-1.5 bg-slate-100 rounded-2xl border border-slate-200">
             {roleConfigs.map((role) => {
               const Icon = role.icon;
               const isSelected = selectedRole === role.id;
@@ -140,35 +143,18 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
                   key={role.id}
                   type="button"
                   onClick={() => handleSelectRole(role)}
-                  className={`p-3 rounded-2xl flex flex-col items-start gap-1.5 transition-all text-left border relative overflow-hidden ${
+                  title={role.label}
+                  aria-label={role.label}
+                  className={`h-12 rounded-xl flex items-center justify-center transition-all duration-200 relative group ${
                     isSelected
-                      ? 'bg-gradient-to-br from-[#D31720]/5 via-white to-[#D31720]/10 border-[#D31720] shadow-md ring-2 ring-[#D31720]/15'
-                      : 'bg-slate-50/80 border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300'
+                      ? 'bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white shadow-md shadow-[#D31720]/30 scale-100 border border-white/30'
+                      : 'bg-white hover:bg-slate-50 text-slate-600 hover:text-[#D31720] border border-slate-200 shadow-2xs hover:scale-105'
                   }`}
                 >
-                  <div className="flex items-center justify-between w-full">
-                    <div className={`p-1.5 rounded-xl shrink-0 ${isSelected ? 'bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200'}`}>
-                      <Icon className="w-3.5 h-3.5" />
-                    </div>
-                    {isSelected ? (
-                      <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-[#D31720] text-white shadow-xs">
-                        Selected
-                      </span>
-                    ) : (
-                      <span className="text-[9px] font-bold text-slate-500 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                        {role.tag}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="w-full min-w-0 mt-0.5">
-                    <span className="text-xs font-black text-slate-950 block truncate">
-                      {role.label}
-                    </span>
-                    <span className="text-[11px] text-slate-700 font-bold block truncate">
-                      {role.user}
-                    </span>
-                  </div>
+                  <Icon className={`w-5 h-5 transition-transform group-hover:scale-110 ${isSelected ? 'stroke-[2.5]' : 'stroke-2'}`} />
+                  {isSelected && (
+                    <span className="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
+                  )}
                 </button>
               );
             })}
@@ -181,7 +167,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="block text-[11px] font-black uppercase tracking-wider text-slate-700">
-                Password for {currentRoleConfig.user}
+                Password
               </label>
             </div>
 

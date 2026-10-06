@@ -11,7 +11,8 @@ import {
   CheckCircle2, 
   ChevronDown, 
   Sparkles, 
-  KeyRound 
+  KeyRound,
+  LogOut 
 } from 'lucide-react';
 import { PAGE_THEMES } from '../theme';
 
@@ -19,6 +20,7 @@ export const Header = ({
   currentUser, 
   onRoleChange, 
   onOpenLoginModal, 
+  onLogout,
   onNewBookingClick, 
   mobileMenuOpen, 
   setMobileMenuOpen, 
@@ -176,81 +178,85 @@ export const Header = ({
               <ChevronDown className={`w-4 h-4 text-white/80 group-hover:text-white transition-transform duration-200 shrink-0 ${roleDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
-            {/* Dropdown Menu with Complete Visible Login Credentials */}
+            {/* Dropdown Menu with ONLY ICONS for personas and Sign Out */}
             {roleDropdownOpen && (
-              <div className="absolute right-0 mt-2.5 w-84 sm:w-96 max-w-[calc(100vw-1.5rem)] rounded-2xl bg-white border-2 border-slate-200/90 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.06)] p-3.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-slate-900">
+              <div className="absolute right-0 mt-2.5 w-72 sm:w-80 max-w-[calc(100vw-1.5rem)] rounded-2xl bg-white border-2 border-slate-200/90 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.06)] p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-150 text-slate-900">
                 {/* Header with Title and explicit Close (X) button */}
-                <div className="px-1 py-1 border-b border-slate-100 pb-2.5 mb-2.5 flex items-center justify-between">
-                  <div className="min-w-0">
-                    <p className="text-xs font-black text-slate-950 uppercase tracking-wider flex items-center gap-1.5">
-                      <span>Active Login Details</span>
-                    </p>
-                    <p className="text-[11px] text-slate-500 mt-0.5 italic">
-                      Switch user persona
-                    </p>
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
+                      {currentUser?.name ? currentUser.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'RR'}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black text-slate-950 truncate">
+                        {currentUser?.name}
+                      </p>
+                      <p className="text-[10px] text-slate-500 font-semibold truncate">
+                        {currentUser?.title || currentUser?.role}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#D31720]/10 text-[#D31720] border border-[#D31720]/25">
-                      Online
+                  <button
+                    onClick={() => setRoleDropdownOpen(false)}
+                    className="p-1 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors shrink-0"
+                    title="Close"
+                    aria-label="Close"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Role Switcher: ONLY ICONS (No exposed cards or credentials) */}
+                <div className="py-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                      <KeyRound className="w-3 h-3 text-[#D31720]" />
+                      <span>Switch Role</span>
                     </span>
-                    <button
-                      onClick={() => setRoleDropdownOpen(false)}
-                      className="p-1 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors"
-                      title="Close"
-                      aria-label="Close"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
+                    <span className="text-[9px] font-bold text-slate-400 italic">
+                      {roles.find(r => r.id === currentUser.role)?.label}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2.5 p-1.5 bg-slate-50 rounded-xl border border-slate-200">
+                    {roles.map((r) => {
+                      const Icon = r.icon;
+                      const isActive = currentUser.role === r.id;
+                      return (
+                        <button
+                          key={r.id}
+                          onClick={() => handleRoleSelect(r.id)}
+                          title={`${r.label} (${r.user})`}
+                          aria-label={r.label}
+                          className={`
+                            h-11 rounded-lg flex items-center justify-center transition-all duration-200 relative group
+                            ${isActive 
+                              ? 'bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white shadow-md shadow-[#D31720]/30 scale-100 border border-white/30' 
+                              : 'bg-white hover:bg-slate-100 text-slate-600 hover:text-[#D31720] border border-slate-200/80 shadow-2xs hover:scale-105'
+                            }
+                          `}
+                        >
+                          <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
+                          {isActive && (
+                            <span className="absolute bottom-1 w-1 h-1 rounded-full bg-white shadow-xs" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Role Cards List - Crisp High Contrast, Solid Background Cards */}
-                <div className="space-y-2">
-                  {roles.map((r) => {
-                    const Icon = r.icon;
-                    const isActive = currentUser.role === r.id;
-                    return (
-                      <button
-                        key={r.id}
-                        onClick={() => handleRoleSelect(r.id)}
-                        className={`w-full text-left p-3 rounded-xl flex items-start gap-3 transition-all ${
-                          isActive 
-                            ? 'bg-red-50/70 text-slate-950 border-2 border-[#D31720] shadow-sm font-bold' 
-                            : 'bg-slate-50 hover:bg-slate-100 text-slate-900 border border-slate-200 shadow-2xs'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg shrink-0 ${isActive ? 'bg-gradient-to-r from-[#D31720] to-[#9B1017] text-white shadow-sm' : 'bg-white text-slate-700 border border-slate-200'}`}>
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-1">
-                            <span className="text-xs font-black text-slate-950">{r.label}</span>
-                            {isActive ? (
-                              <span className="flex items-center gap-1 text-[10px] font-black text-[#D31720] shrink-0 bg-white px-1.5 py-0.5 rounded-md border border-[#D31720]/30 shadow-2xs">
-                                <CheckCircle2 className="w-3 h-3 text-[#D31720]" />
-                                <span>Active</span>
-                              </span>
-                            ) : null}
-                          </div>
-                          <p className="text-xs text-slate-900 font-bold mt-0.5">{r.user}</p>
-                          <p className="text-[10px] text-slate-500 italic mt-0.5">{r.desc}</p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Button to open full Login Portal */}
-                <div className="mt-3 pt-2.5 border-t border-slate-100">
+                {/* Actions: Sign Out button */}
+                <div className="pt-2 border-t border-slate-100 space-y-1.5">
                   <button
                     onClick={() => {
                       setRoleDropdownOpen(false);
-                      if (onOpenLoginModal) onOpenLoginModal();
+                      if (onLogout) onLogout();
                     }}
-                    className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#D31720] to-[#9B1017] hover:brightness-110 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all border border-white/20"
+                    className="w-full py-2 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-[#D31720] font-black text-xs flex items-center justify-center gap-2 active:scale-95 transition-all border border-red-200"
                   >
-                    <KeyRound className="w-4 h-4 text-amber-200" />
-                    <span>Open Full Login Portal</span>
+                    <LogOut className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>Sign Out</span>
                   </button>
                 </div>
               </div>

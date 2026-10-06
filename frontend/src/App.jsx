@@ -11,16 +11,23 @@ import { DriverPortal } from './components/DriverPortal';
 import { SettingsModal } from './components/SettingsModal';
 import { InvoiceModal } from './components/InvoiceModal';
 import { LoginModal } from './components/LoginModal';
+import { LoginPage } from './components/LoginPage';
 import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { PAGE_THEMES } from './theme';
 
 export default function App() {
   // Current active user & role (Tamil Nadu Personas)
-  const [currentUser, setCurrentUser] = useState({
-    id: 'usr-admin',
-    name: 'R. Rajasekaran',
-    role: 'ADMIN',
-    title: 'Managing Director & Founder'
+  // Initially null so opening the page starts on Login screen
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        const stored = window.sessionStorage.getItem('city_cabs_session_user');
+        return stored ? JSON.parse(stored) : null;
+      }
+    } catch (e) {
+      console.warn('Failed to load session user', e);
+    }
+    return null;
   });
 
   const [currentTab, setCurrentTab] = useState('dashboard');
@@ -95,6 +102,13 @@ export default function App() {
   // Handle Login Authentication Success
   const handleLoginSuccess = (authenticatedUser) => {
     setCurrentUser(authenticatedUser);
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.setItem('city_cabs_session_user', JSON.stringify(authenticatedUser));
+      }
+    } catch (e) {
+      console.warn('Failed to save session user', e);
+    }
 
     if (authenticatedUser.role === 'DRIVER') {
       setCurrentTab('driver-portal');
@@ -103,6 +117,19 @@ export default function App() {
     }
 
     showToast(`Access granted: Signed in as ${authenticatedUser.name} (${authenticatedUser.role})`);
+  };
+
+  // Handle Logout (Returns directly to the Login page)
+  const handleLogout = () => {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.removeItem('city_cabs_session_user');
+      }
+    } catch (e) {
+      console.warn('Failed to clear session', e);
+    }
+    setCurrentUser(null);
+    showToast('Signed out successfully.');
   };
 
   // Vehicle Actions
@@ -296,6 +323,25 @@ export default function App() {
     }
   };
 
+  // Gatekeeper: Show Login page on initial open if not authenticated
+  if (!currentUser) {
+    return (
+      <>
+        <LoginPage onLoginSuccess={handleLoginSuccess} />
+        {toast && (
+          <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/95 backdrop-blur-xl border border-[#D31720]/30 text-slate-900 text-xs font-bold shadow-xl animate-in fade-in slide-in-from-bottom-3 duration-200">
+            {toast.type === 'error' ? (
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4 text-[#D31720] shrink-0" />
+            )}
+            <span>{toast.message}</span>
+          </div>
+        )}
+      </>
+    );
+  }
+
   const { title, subtitle } = getTabTitle();
   const activeTheme = PAGE_THEMES[currentTab] || PAGE_THEMES.dashboard;
 
@@ -333,6 +379,7 @@ export default function App() {
         {/* Top Header */}
         <Header
           currentUser={currentUser}
+          onLogout={handleLogout}
           onOpenLoginModal={(role) => {
             if (role) setLoginTargetRole(role);
             setIsLoginModalOpen(true);
