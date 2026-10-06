@@ -148,34 +148,23 @@ export const Header = ({
             </button>
           )}
 
-          {/* Active Logged-in User Pill: High-Gloss Luxury Glass Card with Smooth White Font */}
+          {/* Active Logged-in User: ICON ONLY (No name or title) */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
-              className="flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/40 shadow-[0_4px_18px_rgba(0,0,0,0.22),inset_0_1px_1.5px_rgba(255,255,255,0.6)] backdrop-blur-md transition-all text-left active:scale-95 group shrink-0"
-              title="Active Login Details & Switch Persona"
+              className="p-1.5 sm:p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/40 shadow-[0_4px_18px_rgba(0,0,0,0.22),inset_0_1px_1.5px_rgba(255,255,255,0.6)] backdrop-blur-md transition-all active:scale-95 group shrink-0 flex items-center gap-1.5 cursor-pointer"
+              title={`${currentUser.role}`}
+              aria-label="User Menu"
             >
-              {/* Avatar */}
-              <div className="w-8 h-8 rounded-lg bg-white text-[#D31720] flex items-center justify-center font-black text-xs shrink-0 shadow-md border border-white/80">
-                {currentUser?.name ? currentUser.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'RR'}
+              {/* Role Icon in White Luxury Badge */}
+              <div className="w-8 h-8 rounded-lg bg-white text-[#D31720] flex items-center justify-center font-black text-xs shrink-0 shadow-md border border-white/80 group-hover:scale-105 transition-transform">
+                {currentUser.role === 'ADMIN' && <Shield className="w-4 h-4 stroke-[2.5]" />}
+                {currentUser.role === 'MANAGER' && <Briefcase className="w-4 h-4 stroke-[2.5]" />}
+                {currentUser.role === 'DRIVER' && <Compass className="w-4 h-4 stroke-[2.5]" />}
+                {!['ADMIN', 'MANAGER', 'DRIVER'].includes(currentUser.role) && <User className="w-4 h-4 stroke-[2.5]" />}
               </div>
 
-              {/* Login Details: Full name, role badge, full title - NO TRUNCATION */}
-              <div className="text-left leading-tight pr-0.5">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-black text-white whitespace-nowrap drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
-                    {currentUser.name}
-                  </span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-black tracking-wider bg-white/30 text-white border border-white/50 shadow-2xs">
-                    {currentUser.role}
-                  </span>
-                </div>
-                <div className="text-[10px] sm:text-[11px] text-white/90 font-medium whitespace-nowrap mt-0.5 drop-shadow-xs">
-                  {currentUser.title || currentUser.role}
-                </div>
-              </div>
-
-              <ChevronDown className={`w-4 h-4 text-white/80 group-hover:text-white transition-transform duration-200 shrink-0 ${roleDropdownOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3.5 h-3.5 text-white/90 group-hover:text-white transition-transform duration-200 shrink-0 ${roleDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Dropdown Menu with ONLY ICONS for personas and Sign Out */}
@@ -184,15 +173,18 @@ export const Header = ({
                 {/* Header with Title and explicit Close (X) button */}
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
-                      {currentUser?.name ? currentUser.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'RR'}
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
+                      {currentUser.role === 'ADMIN' && <Shield className="w-4 h-4 stroke-[2.5]" />}
+                      {currentUser.role === 'MANAGER' && <Briefcase className="w-4 h-4 stroke-[2.5]" />}
+                      {currentUser.role === 'DRIVER' && <Compass className="w-4 h-4 stroke-[2.5]" />}
+                      {!['ADMIN', 'MANAGER', 'DRIVER'].includes(currentUser.role) && <User className="w-4 h-4 stroke-[2.5]" />}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-black text-slate-950 truncate">
-                        {currentUser?.name}
+                      <p className="text-xs font-black text-slate-900 truncate">
+                        {roles.find(r => r.id === currentUser.role)?.label || currentUser.role}
                       </p>
                       <p className="text-[10px] text-slate-500 font-semibold truncate">
-                        {currentUser?.title || currentUser?.role}
+                        Active Account
                       </p>
                     </div>
                   </div>
