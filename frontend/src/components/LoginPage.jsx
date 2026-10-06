@@ -71,10 +71,15 @@ export const LoginPage = ({ onLoginSuccess }) => {
   const currentRole = roleConfigs.find(r => r.id === selectedRole) || roleConfigs[0];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200 select-none">
+    <div className="min-h-screen w-full bg-gradient-to-br from-white via-rose-50/50 to-red-50/40 flex items-center justify-center p-4 sm:p-6 relative select-none overflow-hidden">
+      {/* Light, elegant ambient red glow orbs (NO BLACK) */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-red-200/35 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-red-200/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-rose-100/40 rounded-full blur-3xl pointer-events-none" />
+
       {/* Solid Pure White Card Container (No Dark Background) */}
       <div 
-        className="w-full max-w-md rounded-3xl bg-white border-2 border-[#D31720]/25 p-6 sm:p-7 shadow-[0_25px_60px_-15px_rgba(211,23,32,0.25),0_10px_30px_rgba(0,0,0,0.08)] text-slate-900 space-y-5 relative overflow-hidden"
+        className="w-full max-w-md rounded-3xl bg-white border-2 border-[#D31720]/25 p-6 sm:p-7 shadow-[0_25px_60px_-15px_rgba(211,23,32,0.22),0_4px_16px_rgba(0,0,0,0.04)] text-slate-900 space-y-5 relative z-10 overflow-hidden"
         style={{ backgroundColor: '#ffffff' }}
       >
         {/* Top Vibrant Red Accent Bar */}

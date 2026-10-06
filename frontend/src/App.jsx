@@ -299,13 +299,30 @@ export default function App() {
     }
   };
 
+  // Gatekeeper: Render separate standalone Login Page on initial open or refresh
+  if (!currentUser) {
+    return (
+      <>
+        <LoginPage onLoginSuccess={handleLoginSuccess} />
+        {toast && (
+          <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/95 backdrop-blur-xl border border-[#D31720]/30 text-slate-900 text-xs font-bold shadow-xl animate-in fade-in slide-in-from-bottom-3 duration-200">
+            {toast.type === 'error' ? (
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4 text-[#D31720] shrink-0" />
+            )}
+            <span>{toast.message}</span>
+          </div>
+        )}
+      </>
+    );
+  }
+
   const { title, subtitle } = getTabTitle();
   const activeTheme = PAGE_THEMES[currentTab] || PAGE_THEMES.dashboard;
-  const effectiveUser = currentUser || { role: 'ADMIN', name: 'City Cabs', title: 'Operations' };
 
   return (
-    <>
-      <div className={`min-h-screen ${activeTheme.bodyBg} text-slate-950 flex selection:bg-[#D31720] selection:text-white font-sans w-full max-w-full overflow-x-hidden relative transition-colors duration-500 ${!currentUser ? 'filter blur-[6px] pointer-events-none select-none' : ''}`}>
+    <div className={`min-h-screen ${activeTheme.bodyBg} text-slate-950 flex selection:bg-[#D31720] selection:text-white font-sans w-full max-w-full overflow-x-hidden relative transition-colors duration-500`}>
       {/* Dynamic Ambient Glossy Lighting Effect */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {activeTheme.orbs.map((orbClass, idx) => (
@@ -506,11 +523,5 @@ export default function App() {
         onLoginSuccess={handleLoginSuccess}
       />
     </div>
-
-    {/* Gatekeeper: Show Login page on initial open or refresh when unauthenticated */}
-    {!currentUser && (
-      <LoginPage onLoginSuccess={handleLoginSuccess} />
-    )}
-  </>
   );
 }
