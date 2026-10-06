@@ -17,18 +17,8 @@ import { PAGE_THEMES } from './theme';
 
 export default function App() {
   // Current active user & role (Tamil Nadu Personas)
-  // Initially null so opening the page starts on Login screen
-  const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      if (typeof window !== 'undefined' && window.sessionStorage) {
-        const stored = window.sessionStorage.getItem('city_cabs_session_user');
-        return stored ? JSON.parse(stored) : null;
-      }
-    } catch (e) {
-      console.warn('Failed to load session user', e);
-    }
-    return null;
-  });
+  // Always null on initial open and page refresh so login page is always shown!
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -102,13 +92,6 @@ export default function App() {
   // Handle Login Authentication Success
   const handleLoginSuccess = (authenticatedUser) => {
     setCurrentUser(authenticatedUser);
-    try {
-      if (typeof window !== 'undefined' && window.sessionStorage) {
-        window.sessionStorage.setItem('city_cabs_session_user', JSON.stringify(authenticatedUser));
-      }
-    } catch (e) {
-      console.warn('Failed to save session user', e);
-    }
 
     if (authenticatedUser.role === 'DRIVER') {
       setCurrentTab('driver-portal');
@@ -121,13 +104,6 @@ export default function App() {
 
   // Handle Logout (Returns directly to the Login page)
   const handleLogout = () => {
-    try {
-      if (typeof window !== 'undefined' && window.sessionStorage) {
-        window.sessionStorage.removeItem('city_cabs_session_user');
-      }
-    } catch (e) {
-      console.warn('Failed to clear session', e);
-    }
     setCurrentUser(null);
     showToast('Signed out successfully.');
   };
@@ -323,30 +299,13 @@ export default function App() {
     }
   };
 
-  // Gatekeeper: Show Login page on initial open if not authenticated
-  if (!currentUser) {
-    return (
-      <>
-        <LoginPage onLoginSuccess={handleLoginSuccess} />
-        {toast && (
-          <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-white/95 backdrop-blur-xl border border-[#D31720]/30 text-slate-900 text-xs font-bold shadow-xl animate-in fade-in slide-in-from-bottom-3 duration-200">
-            {toast.type === 'error' ? (
-              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
-            ) : (
-              <CheckCircle2 className="w-4 h-4 text-[#D31720] shrink-0" />
-            )}
-            <span>{toast.message}</span>
-          </div>
-        )}
-      </>
-    );
-  }
-
   const { title, subtitle } = getTabTitle();
   const activeTheme = PAGE_THEMES[currentTab] || PAGE_THEMES.dashboard;
+  const effectiveUser = currentUser || { role: 'ADMIN', name: 'City Cabs', title: 'Operations' };
 
   return (
-    <div className={`min-h-screen ${activeTheme.bodyBg} text-slate-950 flex selection:bg-[#D31720] selection:text-white font-sans w-full max-w-full overflow-x-hidden relative transition-colors duration-500`}>
+    <>
+      <div className={`min-h-screen ${activeTheme.bodyBg} text-slate-950 flex selection:bg-[#D31720] selection:text-white font-sans w-full max-w-full overflow-x-hidden relative transition-colors duration-500 ${!currentUser ? 'filter blur-[6px] pointer-events-none select-none' : ''}`}>
       {/* Dynamic Ambient Glossy Lighting Effect */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         {activeTheme.orbs.map((orbClass, idx) => (
@@ -363,7 +322,7 @@ export default function App() {
       <Sidebar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
-        currentUser={currentUser}
+        currentUser={effectiveUser}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
         stats={stats}
@@ -378,7 +337,7 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0 w-full lg:pl-64 transition-all overflow-x-hidden relative z-10">
         {/* Top Header */}
         <Header
-          currentUser={currentUser}
+          currentUser={effectiveUser}
           onLogout={handleLogout}
           onOpenLoginModal={(role) => {
             if (role) setLoginTargetRole(role);
@@ -547,5 +506,11 @@ export default function App() {
         onLoginSuccess={handleLoginSuccess}
       />
     </div>
+
+    {/* Gatekeeper: Show Login page on initial open or refresh when unauthenticated */}
+    {!currentUser && (
+      <LoginPage onLoginSuccess={handleLoginSuccess} />
+    )}
+  </>
   );
 }
