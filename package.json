@@ -1,7 +1,7 @@
 {
   "name": "cab-and-travels-management-system",
   "version": "1.0.0",
-  "description": "Kaveri Cabs & Travels Fleet Management System (React.js, Tailwind CSS, LocalStorage Engine)",
+  "description": "City Cabs & Travels Fleet Management System (React.js, Tailwind CSS, LocalStorage Engine)",
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "start": "npm --prefix frontend run dev",
@@ -15,6 +15,6 @@
     "tailwind",
     "localstorage"
   ],
-  "author": "Kaveri Cabs",
+  "author": "City Cabs",
   "license": "ISC"
 }
