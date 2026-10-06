@@ -211,7 +211,7 @@ export const VehicleManagement = ({
               className="rounded-2xl glass-panel glass-panel-hover overflow-hidden flex flex-col justify-between transition-all group border border-slate-200/90 shadow-sm hover:shadow-md bg-white/95 backdrop-blur-md"
             >
               {/* Image banner: Clean light stage so vehicle photo looks clean */}
-              <div className="relative h-48 bg-gradient-to-b from-slate-100 to-white flex items-center justify-center p-3 overflow-hidden border-b border-slate-200">
+              <div className="relative h-48 bg-white flex items-center justify-center p-3 overflow-hidden border-b border-slate-200">
                 <img
                   src={v.image}
                   alt={v.model}
