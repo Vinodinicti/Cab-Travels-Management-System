@@ -57,12 +57,34 @@ function syncFleetStatus(db, booking, newStatus) {
   const vehicle = db.vehicles.find(v => v.id === booking.vehicleId);
   const driver = db.drivers.find(d => d.id === booking.driverId);
 
-  if (newStatus === "In Progress") {
-    if (vehicle && vehicle.status !== "Maintenance") vehicle.status = "On Trip";
-    if (driver && driver.status !== "Off Duty") driver.status = "On Trip";
+  if (newStatus === "In Progress" || newStatus === "Confirmed") {
+    if (vehicle && vehicle.status !== "Maintenance") {
+      vehicle.status = "On Trip";
+    }
+    if (driver && driver.status !== "Off Duty") {
+      driver.status = "On Trip";
+      if (vehicle) {
+        driver.assignedVehicleId = vehicle.id;
+        driver.assignedVehicleName = `${vehicle.model} (${vehicle.registrationNumber})`;
+      }
+    }
   } else if (newStatus === "Completed" || newStatus === "Cancelled") {
-    if (vehicle && vehicle.status === "On Trip") vehicle.status = "Available";
-    if (driver && driver.status === "On Trip") driver.status = "Available";
+    // Check if vehicle has any other active trips (In Progress or Confirmed)
+    const hasOtherVehicleTrip = (db.bookings || []).some(
+      b => b.id !== booking.id && b.vehicleId === booking.vehicleId && (b.bookingStatus === "In Progress" || b.bookingStatus === "Confirmed")
+    );
+    if (!hasOtherVehicleTrip && vehicle && vehicle.status === "On Trip") {
+      vehicle.status = "Available";
+    }
+
+    // Check if driver has any other active trips (In Progress or Confirmed)
+    const hasOtherDriverTrip = (db.bookings || []).some(
+      b => b.id !== booking.id && b.driverId === booking.driverId && (b.bookingStatus === "In Progress" || b.bookingStatus === "Confirmed")
+    );
+    if (!hasOtherDriverTrip && driver && driver.status === "On Trip") {
+      driver.status = "Available";
+    }
+
     if (newStatus === "Completed") {
       if (driver) driver.totalTrips = (driver.totalTrips || 0) + 1;
       const customer = db.customers.find(c => c.id === booking.customerId);
@@ -562,21 +584,31 @@ export const api = {
     let cEmail = customerEmail;
 
     if (!cId && cName && cPhone) {
-      const existing = db.customers.find(c => c.phone === cPhone);
+      const existing = db.customers.find(c => c.phone === cPhone || (c.name && c.name.toLowerCase() === cName.toLowerCase()));
       if (existing) {
         cId = existing.id;
+        cName = existing.name;
+        cPhone = existing.phone;
+        cEmail = existing.email || cEmail;
+        existing.totalBookings = (existing.totalBookings || 0) + 1;
       } else {
+        const detectedCity = pickupLocation.includes("Chennai") ? "Chennai" :
+          (pickupLocation.includes("Coimbatore") ? "Coimbatore" :
+          (pickupLocation.includes("Madurai") ? "Madurai" :
+          (pickupLocation.includes("Salem") ? "Salem" :
+          (pickupLocation.includes("Trichy") ? "Trichy" : "Chennai"))));
+
         const newCust = {
           id: `cust-${Date.now().toString().slice(-4)}`,
           name: cName,
           phone: cPhone,
           email: cEmail || "",
           address: pickupLocation,
-          city: "",
+          city: detectedCity,
           totalBookings: 1,
           totalSpent: 0,
           rating: 5.0,
-          notes: "Auto-registered upon booking",
+          notes: "Auto-registered via trip booking",
           createdAt: new Date().toISOString().split("T")[0]
         };
         db.customers.unshift(newCust);
@@ -588,7 +620,25 @@ export const api = {
         cName = existing.name;
         cPhone = existing.phone;
         cEmail = existing.email;
+        existing.totalBookings = (existing.totalBookings || 0) + 1;
       }
+    } else if (cName) {
+      const detectedCity = pickupLocation.includes("Chennai") ? "Chennai" : "Tamil Nadu";
+      const newCust = {
+        id: `cust-${Date.now().toString().slice(-4)}`,
+        name: cName,
+        phone: cPhone || "+91 98401 99999",
+        email: cEmail || "",
+        address: pickupLocation,
+        city: detectedCity,
+        totalBookings: 1,
+        totalSpent: 0,
+        rating: 5.0,
+        notes: "Auto-registered via trip booking",
+        createdAt: new Date().toISOString().split("T")[0]
+      };
+      db.customers.unshift(newCust);
+      cId = newCust.id;
     }
 
     const vehicle = db.vehicles.find(v => v.id === vehicleId);
@@ -735,7 +785,7 @@ export const api = {
     if (index === -1) throw new Error("Booking not found");
 
     const booking = db.bookings[index];
-    if (booking.bookingStatus === "In Progress") {
+    if (booking.bookingStatus === "In Progress" || booking.bookingStatus === "Confirmed") {
       syncFleetStatus(db, booking, "Cancelled");
     }
 

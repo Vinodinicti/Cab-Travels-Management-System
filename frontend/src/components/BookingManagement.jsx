@@ -59,6 +59,14 @@ export const BookingManagement = ({
   };
   const [formData, setFormData] = useState(initialForm);
 
+  useEffect(() => {
+    if (initialOpenModal) {
+      setEditingBooking(null);
+      setFormData(initialForm);
+      setModalOpen(true);
+    }
+  }, [initialOpenModal]);
+
   const [calculatedFare, setCalculatedFare] = useState({
     baseFare: 140,
     distanceCharge: 352,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Compass, 
   MapPin, 
@@ -10,20 +10,40 @@ import {
   Star, 
   Calendar, 
   FileText,
-  Car
+  Car,
+  UserCheck
 } from 'lucide-react';
 
 export const DriverPortal = ({ 
   currentUser, 
   bookings, 
   drivers, 
+  selectedDriverId,
+  onSelectDriver,
   onStatusChange, 
   onToggleDuty, 
   onViewInvoice, 
   currency = '₹' 
 }) => {
-  const currentDriver = drivers.find(d => d.id === currentUser.driverId) || drivers[0] || {};
+  const [activeDriverId, setActiveDriverId] = useState(
+    selectedDriverId || (currentUser?.role === 'DRIVER' ? currentUser.driverId : (drivers[0]?.id || 'drv-1'))
+  );
+
+  useEffect(() => {
+    if (selectedDriverId) {
+      setActiveDriverId(selectedDriverId);
+    }
+  }, [selectedDriverId]);
+
+  const currentDriver = drivers.find(d => d.id === activeDriverId) || drivers[0] || {};
   
+  const handleDriverChange = (id) => {
+    setActiveDriverId(id);
+    if (onSelectDriver) {
+      onSelectDriver(id);
+    }
+  };
+
   const driverBookings = bookings.filter(
     b => b.driverId === currentDriver.id || b.driverName === currentDriver.name
   );
@@ -36,6 +56,35 @@ export const DriverPortal = ({
 
   return (
     <div className="space-y-5 sm:space-y-6 pb-12 max-w-5xl mx-auto">
+      {/* Captain Terminal Switcher (Allows Operators/Admins to view each Captain's duty console) */}
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-page-enter">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-[#D31720]/10 text-[#D31720] flex items-center justify-center font-bold">
+            <Compass className="w-5 h-5 stroke-[2.5]" />
+          </div>
+          <div>
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-500">Terminal Dispatch</h4>
+            <span className="text-xs font-bold text-slate-800">Select Captain Console:</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <select
+            value={currentDriver.id || ''}
+            onChange={(e) => handleDriverChange(e.target.value)}
+            className="w-full sm:w-80 px-3.5 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-300 rounded-xl text-xs font-black text-slate-900 focus:outline-none focus:border-[#D31720] focus:ring-1 focus:ring-[#D31720] shadow-xs cursor-pointer transition-colors"
+          >
+            {drivers.map(d => {
+              const activeCount = bookings.filter(b => (b.driverId === d.id || b.driverName === d.name) && (b.bookingStatus === 'In Progress' || b.bookingStatus === 'Confirmed')).length;
+              return (
+                <option key={d.id} value={d.id}>
+                  {d.name} — [{d.status}] ({activeCount} active ride{activeCount === 1 ? '' : 's'})
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
       {/* Driver Status Glassy Banner */}
       <div className="p-4 sm:p-6 rounded-2xl theme-banner-vehicles shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-page-enter">
         <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 w-full sm:w-auto">

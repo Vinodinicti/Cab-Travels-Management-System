@@ -43,6 +43,7 @@ export default function App() {
   // Modals
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [isNewBookingModalOpen, setIsNewBookingModalOpen] = useState(false);
+  const [selectedDriverId, setSelectedDriverId] = useState('drv-1');
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -210,8 +211,12 @@ export default function App() {
     try {
       const newB = await api.createBooking(bookingData);
       setBookings(prev => [newB, ...prev]);
-      showToast(`Trip ${newB.id} scheduled for ${newB.customerName}!`);
-      loadAllData();
+      if (newB.driverId) {
+        setSelectedDriverId(newB.driverId);
+      }
+      setIsNewBookingModalOpen(false);
+      showToast(`Trip ${newB.id} scheduled for ${newB.customerName}! Fleet & Captain marked On Trip.`);
+      await loadAllData();
     } catch (err) {
       showToast(err.message || 'Failed to create booking', 'error');
     }
@@ -221,8 +226,11 @@ export default function App() {
     try {
       const updated = await api.updateBooking(id, bookingData);
       setBookings(prev => prev.map(b => b.id === id ? updated : b));
+      if (updated.driverId) {
+        setSelectedDriverId(updated.driverId);
+      }
       showToast(`Booking ${id} updated.`);
-      loadAllData();
+      await loadAllData();
     } catch (err) {
       showToast(err.message || 'Failed to update booking', 'error');
     }
@@ -236,7 +244,7 @@ export default function App() {
       });
       setBookings(prev => prev.map(b => b.id === id ? updated : b));
       showToast(`Trip ${id} marked as ${newStatus}`);
-      loadAllData();
+      await loadAllData();
     } catch (err) {
       showToast(err.message || 'Status transition failed', 'error');
     }
@@ -247,7 +255,7 @@ export default function App() {
       await api.deleteBooking(id);
       setBookings(prev => prev.filter(b => b.id !== id));
       showToast(`Booking record ${id} removed.`);
-      loadAllData();
+      await loadAllData();
     } catch (err) {
       showToast(err.message || 'Failed to delete booking', 'error');
     }
@@ -328,7 +336,10 @@ export default function App() {
             if (role) setLoginTargetRole(role);
             setIsLoginModalOpen(true);
           }}
-          onNewBookingClick={() => setIsNewBookingModalOpen(true)}
+          onNewBookingClick={() => {
+            setCurrentTab('bookings');
+            setIsNewBookingModalOpen(true);
+          }}
           onResetData={handleResetData}
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
@@ -355,7 +366,10 @@ export default function App() {
                   drivers={drivers}
                   currency={settings?.currency || '₹'}
                   onNavigate={setCurrentTab}
-                  onNewBookingClick={() => setIsNewBookingModalOpen(true)}
+                  onNewBookingClick={() => {
+                    setCurrentTab('bookings');
+                    setIsNewBookingModalOpen(true);
+                  }}
                   onViewInvoice={setSelectedInvoice}
                   onQuickStatusChange={handleStatusChange}
                 />
@@ -415,6 +429,9 @@ export default function App() {
                   currentUser={currentUser}
                   bookings={bookings}
                   drivers={drivers}
+                  vehicles={vehicles}
+                  selectedDriverId={selectedDriverId}
+                  onSelectDriver={setSelectedDriverId}
                   onStatusChange={handleStatusChange}
                   onToggleDuty={(driverId, newStatus) => handleUpdateDriver(driverId, { status: newStatus })}
                   onViewInvoice={setSelectedInvoice}
