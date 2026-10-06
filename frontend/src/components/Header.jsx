@@ -2,35 +2,32 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   Car, 
   Plus, 
-  RotateCcw, 
   User, 
   Shield, 
   Briefcase, 
   Compass, 
   Menu, 
-  X,
-  CheckCircle2,
-  ChevronDown,
-  Sparkles,
-  KeyRound
+  X, 
+  CheckCircle2, 
+  ChevronDown, 
+  Sparkles, 
+  KeyRound 
 } from 'lucide-react';
 import { PAGE_THEMES } from '../theme';
 
 export const Header = ({ 
   currentUser, 
   onRoleChange, 
-  onOpenLoginModal,
+  onOpenLoginModal, 
   onNewBookingClick, 
-  onResetData, 
   mobileMenuOpen, 
-  setMobileMenuOpen,
-  pageTitle,
-  pageSubtitle,
-  currentTab,
-  theme
+  setMobileMenuOpen, 
+  pageTitle, 
+  pageSubtitle, 
+  currentTab, 
+  theme 
 }) => {
   const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
-  const [resetConfirming, setResetConfirming] = useState(false);
   const dropdownRef = useRef(null);
 
   const currentTheme = theme || PAGE_THEMES[currentTab] || PAGE_THEMES.dashboard;
@@ -96,12 +93,6 @@ export const Header = ({
     }
   };
 
-  const handleReset = async () => {
-    setResetConfirming(true);
-    await onResetData();
-    setTimeout(() => setResetConfirming(false), 2000);
-  };
-
   return (
     <header className={`sticky top-0 ${roleDropdownOpen ? 'z-50' : 'z-40'} ${currentTheme.navGradient} ${currentTheme.navBorder} ${currentTheme.navGlow} backdrop-blur-xl px-3 sm:px-6 py-2.5 sm:py-3.5 transition-all duration-300 relative antialiased`} style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}>
       {/* Specular gloss highlight container with isolated overflow-hidden */}
@@ -154,19 +145,6 @@ export const Header = ({
               <span className="hidden xs:inline tracking-tight font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">New Booking</span>
             </button>
           )}
-
-          {/* Reset Demo Data Button */}
-          <button
-            onClick={handleReset}
-            disabled={resetConfirming}
-            title="Reset system to default demo state"
-            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-bold text-white bg-white/15 hover:bg-white/25 border border-white/35 rounded-xl transition-all shadow-sm active:scale-95 backdrop-blur-md shrink-0"
-          >
-            <RotateCcw className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${resetConfirming ? 'animate-spin text-white' : 'text-white'}`} />
-            <span className="hidden sm:inline text-white drop-shadow-xs">
-              {resetConfirming ? 'Restoring...' : 'Reset Demo Data'}
-            </span>
-          </button>
 
           {/* Active Logged-in User Pill: High-Gloss Luxury Glass Card with Smooth White Font */}
           <div className="relative" ref={dropdownRef}>

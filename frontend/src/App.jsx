@@ -92,18 +92,6 @@ export default function App() {
     showToast(`Access granted: Signed in as ${authenticatedUser.name} (${authenticatedUser.role})`);
   };
 
-  // Reset Demo Data
-  const handleResetData = async () => {
-    try {
-      await api.resetDemoData();
-      await loadAllData();
-      showToast('All Tamil Nadu demo records restored successfully!');
-    } catch (err) {
-      console.error(err);
-      showToast('Reset completed.');
-    }
-  };
-
   // Vehicle Actions
   const handleAddVehicle = async (vehData) => {
     try {
@@ -340,7 +328,6 @@ export default function App() {
             setCurrentTab('bookings');
             setIsNewBookingModalOpen(true);
           }}
-          onResetData={handleResetData}
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
           pageTitle={title}
@@ -443,7 +430,6 @@ export default function App() {
                 <SettingsModal
                   settings={settings}
                   onUpdateSettings={handleUpdateSettings}
-                  onResetData={handleResetData}
                 />
               )}
             </>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { 
   Settings, 
   Shield, 
-  RotateCcw, 
   Save, 
   CheckCircle2, 
   Building2, 
@@ -11,8 +10,7 @@ import {
 
 export const SettingsModal = ({ 
   settings, 
-  onUpdateSettings, 
-  onResetData 
+  onUpdateSettings 
 }) => {
   const [formData, setFormData] = useState({
     companyName: settings?.companyName || 'City Cabs & Travels',
@@ -29,21 +27,12 @@ export const SettingsModal = ({
   });
 
   const [savedMessage, setSavedMessage] = useState(false);
-  const [resetting, setResetting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onUpdateSettings(formData);
     setSavedMessage(true);
     setTimeout(() => setSavedMessage(false), 3000);
-  };
-
-  const handleReset = async () => {
-    if (confirm("Reset all operational data back to the Tamil Nadu demo state?")) {
-      setResetting(true);
-      await onResetData();
-      setResetting(false);
-    }
   };
 
   return (
@@ -248,7 +237,7 @@ export const SettingsModal = ({
                   <td className="py-2.5 px-3 text-center text-[#D31720] font-bold">✓ Assigned</td>
                 </tr>
                 <tr>
-                  <td className="py-2.5 px-3 font-semibold text-slate-950">System Settings, Fares & Reset Demo Data</td>
+                  <td className="py-2.5 px-3 font-semibold text-slate-950">System Settings & Tariff Engine</td>
                   <td className="py-2.5 px-3 text-center text-[#D31720] font-bold">✓ Full</td>
                   <td className="py-2.5 px-3 text-center text-red-600 font-bold">✗ Read Only</td>
                   <td className="py-2.5 px-3 text-center text-red-600 font-bold">✗ No Access</td>
@@ -259,17 +248,7 @@ export const SettingsModal = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-[#D31720]/15">
-          <button
-            type="button"
-            onClick={handleReset}
-            disabled={resetting}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white hover:bg-red-50 text-red-700 border border-[#D31720]/20 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm"
-          >
-            <RotateCcw className={`w-3.5 h-3.5 ${resetting ? 'animate-spin' : ''}`} />
-            <span>Restore Factory Demo Data</span>
-          </button>
-
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#D31720]/15">
           <button
             type="submit"
             className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D31720] to-[#9B1017] hover:brightness-105 text-white font-black text-sm active:scale-95 transition-all shadow-md shadow-[#D31720]/30 border border-white/30 flex items-center justify-center gap-2"
