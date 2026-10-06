@@ -339,7 +339,7 @@ export default function App() {
       <Sidebar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
-        currentUser={effectiveUser}
+        currentUser={currentUser}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
         stats={stats}
@@ -354,7 +354,7 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0 w-full lg:pl-64 transition-all overflow-x-hidden relative z-10">
         {/* Top Header */}
         <Header
-          currentUser={effectiveUser}
+          currentUser={currentUser}
           onLogout={handleLogout}
           onOpenLoginModal={(role) => {
             if (role) setLoginTargetRole(role);
