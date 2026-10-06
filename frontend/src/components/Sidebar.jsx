@@ -137,7 +137,7 @@ export const Sidebar = ({
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 leading-none">
-                <span className="font-black tracking-tight text-white text-base drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)]">KAVERI</span>
+                <span className="font-black tracking-tight text-white text-base drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)]">CITY</span>
                 <span className="font-extrabold tracking-tight text-amber-200 text-base drop-shadow-sm">CABS</span>
               </div>
               <p className="text-[10px] text-white/90 tracking-wider font-semibold italic mt-1 truncate drop-shadow-xs">

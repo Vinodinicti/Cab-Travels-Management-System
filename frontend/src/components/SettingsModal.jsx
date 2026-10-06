@@ -15,7 +15,7 @@ export const SettingsModal = ({
   onResetData 
 }) => {
   const [formData, setFormData] = useState({
-    companyName: settings?.companyName || 'Kaveri Cabs & Travels',
+    companyName: settings?.companyName || 'City Cabs & Travels',
     tagline: settings?.tagline || "Tamil Nadu's Trusted Fleet & Chauffeur Network",
     currency: settings?.currency || '₹',
     currencyCode: settings?.currencyCode || 'INR',
@@ -24,7 +24,7 @@ export const SettingsModal = ({
     waitingChargePerHour: settings?.waitingChargePerHour || 120,
     gstTaxPercentage: settings?.gstTaxPercentage || 5,
     supportPhone: settings?.supportPhone || '+91 44 2234 5678',
-    supportEmail: settings?.supportEmail || 'ops@kaveritravels.tn.gov',
+    supportEmail: settings?.supportEmail || 'support@citycabs.com',
     address: settings?.address || 'No. 42, GST Road, Guindy Industrial Estate, Chennai, Tamil Nadu - 600032'
   });
 

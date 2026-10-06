@@ -131,7 +131,7 @@ export const Header = ({
               </h1>
               <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/20 text-white border border-white/35 backdrop-blur-md shadow-sm">
                 <Sparkles className="w-3 h-3 text-amber-200" />
-                <span>KAVERI</span>
+                <span>CITY CABS</span>
               </span>
             </div>
             {pageSubtitle && (

@@ -133,7 +133,7 @@ export const Dashboard = ({
           </div>
           <h2 className="text-lg sm:text-2xl font-black bg-gradient-to-r from-[#D31720] via-red-600 to-red-600 bg-clip-text text-transparent tracking-tight flex items-center gap-2">
             <Car className="w-5 h-5 sm:w-6 sm:h-6 text-[#D31720]" />
-            <span>Kaveri Cabs Operations Hub</span>
+            <span>City Cabs Operations Hub</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 font-medium italic">
             Real-time dispatch and fleet oversight across Chennai, Coimbatore, Madurai, Salem & Trichy depots

@@ -283,7 +283,7 @@ export default function App() {
       case 'settings':
         return { title: 'System Administration', subtitle: 'Tariff Engine, GST & Permissions Matrix' };
       default:
-        return { title: 'Operations Control', subtitle: 'Kaveri Cabs & Travels' };
+        return { title: 'Operations Control', subtitle: 'City Cabs & Travels' };
     }
   };
 

@@ -11,6 +11,7 @@ import {
   KeyRound,
   CheckCircle2
 } from 'lucide-react';
+import { api } from '../api/apiClient';
 
 export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADMIN' }) => {
   const [selectedRole, setSelectedRole] = useState(initialRole || 'ADMIN');
@@ -70,20 +71,10 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, initialRole = 'ADM
     setError('');
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          role: selectedRole,
-          password: password
-        })
+      const data = await api.login({
+        role: selectedRole,
+        password: password
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Authentication failed. Please check credentials.');
-      }
 
       setError('');
       onLoginSuccess(data.user);

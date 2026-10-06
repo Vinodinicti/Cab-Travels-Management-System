@@ -424,7 +424,7 @@ export const DriverManagement = ({
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="driver@kaveritravels.tn.gov"
+                    placeholder="driver@citycabs.com"
                     className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-950 font-semibold focus:outline-none focus:border-[#D31720] shadow-xs"
                   />
                 </div>

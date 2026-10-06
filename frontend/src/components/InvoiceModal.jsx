@@ -63,7 +63,7 @@ export const InvoiceModal = ({ booking, settings, onClose }) => {
                   <Car className="w-4 h-4" />
                 </div>
                 <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-950">
-                  {settings?.companyName || 'Kaveri Cabs & Travels'}
+                  {settings?.companyName || 'City Cabs & Travels'}
                 </h2>
               </div>
               <p className="text-xs text-slate-700 font-bold mt-1 italic">{settings?.tagline || "Tamil Nadu's Trusted Fleet & Chauffeur Network"}</p>
@@ -216,7 +216,7 @@ export const InvoiceModal = ({ booking, settings, onClose }) => {
           {/* Footer Terms */}
           <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-600 gap-2 font-medium">
             <p className="text-center sm:text-left font-semibold">
-              Kaveri Cabs & Travels 24x7 Customer Helpline: {settings?.supportPhone || '+91 44 2234 5678'}
+              City Cabs & Travels 24x7 Customer Helpline: {settings?.supportPhone || '+91 44 2234 5678'}
             </p>
             <div className="font-mono font-bold text-[#D31720] uppercase tracking-wider text-[10px]">
               [ Digitally Authorized • Tamil Nadu State ]
