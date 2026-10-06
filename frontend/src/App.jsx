@@ -44,6 +44,19 @@ export default function App() {
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [isNewBookingModalOpen, setIsNewBookingModalOpen] = useState(false);
   const [selectedDriverId, setSelectedDriverId] = useState('drv-1');
+  const [bookingStatusFilter, setBookingStatusFilter] = useState('All');
+
+  const handleNavigate = (tab, filter) => {
+    setCurrentTab(tab);
+    if (tab === 'bookings' && filter) {
+      setBookingStatusFilter(filter);
+    } else if (tab === 'bookings') {
+      setBookingStatusFilter('All');
+    }
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -352,7 +365,7 @@ export default function App() {
                   vehicles={vehicles}
                   drivers={drivers}
                   currency={settings?.currency || '₹'}
-                  onNavigate={setCurrentTab}
+                  onNavigate={handleNavigate}
                   onNewBookingClick={() => {
                     setCurrentTab('bookings');
                     setIsNewBookingModalOpen(true);
@@ -376,6 +389,7 @@ export default function App() {
                   onViewInvoice={setSelectedInvoice}
                   currency={settings?.currency || '₹'}
                   initialOpenModal={isNewBookingModalOpen}
+                  initialStatusFilter={bookingStatusFilter}
                 />
               )}
 

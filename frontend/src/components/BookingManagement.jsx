@@ -29,12 +29,19 @@ export const BookingManagement = ({
   onDeleteBooking, 
   onViewInvoice,
   currency = '₹',
-  initialOpenModal = false
+  initialOpenModal = false,
+  initialStatusFilter = 'All'
 }) => {
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState(initialStatusFilter);
   const [modalOpen, setModalOpen] = useState(initialOpenModal);
   const [editingBooking, setEditingBooking] = useState(null);
+
+  useEffect(() => {
+    if (initialStatusFilter) {
+      setStatusFilter(initialStatusFilter);
+    }
+  }, [initialStatusFilter]);
 
   // Form State for Booking
   const initialForm = {

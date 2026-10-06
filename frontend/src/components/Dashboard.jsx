@@ -42,7 +42,9 @@ export const Dashboard = ({
       glossyClass: 'glossy-crimson',
       numberColor: 'text-[#D31720]',
       icon: Compass,
-      pulse: totals.activeTrips > 0
+      pulse: totals.activeTrips > 0,
+      targetTab: 'bookings',
+      targetFilter: 'In Progress'
     },
     {
       num: '02',
@@ -51,7 +53,9 @@ export const Dashboard = ({
       subtext: 'Passenger fares settled',
       glossyClass: 'glossy-orange',
       numberColor: 'text-[#FEA24F]',
-      icon: IndianRupee
+      icon: IndianRupee,
+      targetTab: 'bookings',
+      targetFilter: 'Completed'
     },
     {
       num: '03',
@@ -60,7 +64,9 @@ export const Dashboard = ({
       subtext: `${fleet.onTrip} on trip • ${fleet.maintenance} service`,
       glossyClass: 'glossy-aqua',
       numberColor: 'text-[#D31720]',
-      icon: Car
+      icon: Car,
+      targetTab: 'vehicles',
+      targetFilter: 'All'
     },
     {
       num: '04',
@@ -69,7 +75,9 @@ export const Dashboard = ({
       subtext: 'Completed safely',
       glossyClass: 'glossy-teal',
       numberColor: 'text-[#D31720]',
-      icon: CheckCircle2
+      icon: CheckCircle2,
+      targetTab: 'bookings',
+      targetFilter: 'Completed'
     },
     {
       num: '05',
@@ -78,7 +86,9 @@ export const Dashboard = ({
       subtext: `${drivers.onTrip || 0} driving • TN staff`,
       glossyClass: 'glossy-navy',
       numberColor: 'text-[#051A2D]',
-      icon: Users
+      icon: Users,
+      targetTab: 'drivers',
+      targetFilter: 'All'
     }
   ];
 
@@ -165,14 +175,24 @@ export const Dashboard = ({
           return (
             <div
               key={idx}
-              className={`glossy-card ${card.glossyClass} p-3 rounded-2xl flex flex-col justify-between text-white shadow-md cursor-pointer transition-all duration-200 hover:scale-[1.03] hover:shadow-xl`}
+              role="button"
+              tabIndex={0}
+              onClick={() => onNavigate && onNavigate(card.targetTab, card.targetFilter)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onNavigate && onNavigate(card.targetTab, card.targetFilter);
+                }
+              }}
+              className={`glossy-card ${card.glossyClass} p-3 rounded-2xl flex flex-col justify-between text-white shadow-md cursor-pointer transition-all duration-200 hover:scale-[1.03] active:scale-95 hover:shadow-xl touch-manipulation group select-none`}
+              title={`Click to view ${card.title}`}
             >
               {/* Top row: Number badge & Icon */}
               <div className="flex items-center justify-between mb-1.5">
-                <div className={`w-6 h-6 rounded-full bg-white ${card.numberColor} shadow-sm flex items-center justify-center font-black text-[11px] shrink-0 border border-white/80`}>
+                <div className={`w-6 h-6 rounded-full bg-white ${card.numberColor} shadow-sm flex items-center justify-center font-black text-[11px] shrink-0 border border-white/80 group-hover:scale-110 transition-transform`}>
                   {card.num}
                 </div>
-                <div className="w-6 h-6 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-white shrink-0">
+                <div className="w-6 h-6 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-white shrink-0 group-hover:bg-white/30 transition-colors">
                   <Icon className="w-3.5 h-3.5 text-white" />
                 </div>
               </div>
@@ -191,6 +211,12 @@ export const Dashboard = ({
                 <p className="text-[10px] text-white/90 font-medium leading-tight">
                   {card.subtext}
                 </p>
+              </div>
+
+              {/* Bottom interactive indicator */}
+              <div className="pt-2 mt-1.5 border-t border-white/20 flex items-center justify-between text-[10px] font-black text-white/85 group-hover:text-white transition-colors">
+                <span>View Details</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </div>
             </div>
           );
