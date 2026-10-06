@@ -86,15 +86,19 @@ export const DriverPortal = ({
         </div>
       </div>
       {/* Driver Status Glassy Banner */}
-      <div className="p-4 sm:p-6 rounded-2xl theme-banner-vehicles shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-page-enter">
-        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 w-full sm:w-auto">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-[#D31720] to-[#9B1017] border border-white/30 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md shrink-0">
+      <div className="p-3.5 sm:p-4 rounded-2xl theme-banner-vehicles shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 animate-page-enter relative overflow-hidden group">
+        {/* Subtle Ambient Color Glow & Specular Line */}
+        <div className="absolute -top-10 -right-10 w-36 h-36 bg-gradient-to-br from-red-500/15 via-[#D31720]/10 to-transparent rounded-full blur-2xl pointer-events-none animate-pulse" />
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D31720]/35 to-transparent pointer-events-none" />
+
+        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 w-full sm:w-auto relative z-10">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-[#D31720] to-[#9B1017] border border-white/30 flex items-center justify-center text-white font-black text-sm sm:text-base shadow-sm shrink-0">
             {currentDriver?.name ? currentDriver.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'CP'}
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-base sm:text-xl font-black bg-gradient-to-r from-[#D31720] via-red-600 to-red-600 bg-clip-text text-transparent truncate">{currentDriver.name || 'Murugan Selvam'}</h2>
-              <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold shrink-0 ${
+              <h2 className="text-sm sm:text-base md:text-lg font-black bg-gradient-to-r from-[#D31720] via-red-700 to-[#7D0B12] bg-clip-text text-transparent truncate">{currentDriver.name || 'Murugan Selvam'}</h2>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold shrink-0 ${
                 currentDriver.status === 'Available' ? 'bg-[#D31720]/15 text-[#D31720] border border-[#D31720]/40' :
                 currentDriver.status === 'On Trip' ? 'bg-[#FEA24F]/15 text-[#B25900] border border-[#FEA24F]/40' :
                 'bg-[#051A2D]/10 text-[#051A2D] border border-[#051A2D]/30'
@@ -103,10 +107,10 @@ export const DriverPortal = ({
                  currentDriver.status === 'On Trip' ? 'On Trip' : 'Off Duty'}
               </span>
             </div>
-            <p className="text-xs text-slate-700 font-semibold mt-0.5 truncate italic">
+            <p className="text-[11px] sm:text-xs text-slate-700 font-semibold mt-0.5 truncate italic">
               Assigned Cab: <strong className="text-slate-950 font-black not-italic">{currentDriver.assignedVehicleName || 'Toyota Innova Crysta (TN 07 CM 4050)'}</strong>
             </p>
-            <div className="flex items-center gap-3 text-xs text-slate-700 mt-1 font-bold">
+            <div className="flex items-center gap-3 text-[11px] sm:text-xs text-slate-700 mt-1 font-bold">
               <span className="flex items-center gap-1 text-amber-500">
                 <Star className="w-3.5 h-3.5 fill-amber-400 stroke-none shrink-0" />
                 <span className="text-slate-950 font-black">{currentDriver.rating || 4.9}</span> Rating
@@ -116,13 +120,13 @@ export const DriverPortal = ({
           </div>
         </div>
 
-        <div className="w-full sm:w-auto flex items-center justify-end">
+        <div className="w-full sm:w-auto flex items-center justify-end relative z-10">
           {currentDriver.status !== 'On Trip' && (
             <button
               onClick={() => onToggleDuty(currentDriver.id, currentDriver.status === 'Off Duty' ? 'Available' : 'Off Duty')}
-              className={`w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm text-center ${
+              className={`w-full sm:w-auto px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all shadow-sm text-center ${
                 currentDriver.status === 'Off Duty'
-                  ? 'bg-gradient-to-r from-[#D31720] to-[#D31720] hover:brightness-105 text-white font-black shadow-[0_2px_14px_rgba(6,129,135,0.30)] border border-white/20'
+                  ? 'bg-gradient-to-r from-[#D31720] to-[#9B1017] hover:brightness-105 text-white font-black shadow-[0_2px_14px_rgba(211,23,32,0.30)] border border-white/20'
                   : 'bg-white text-slate-800 hover:bg-slate-100 border border-slate-300 font-bold'
               }`}
             >

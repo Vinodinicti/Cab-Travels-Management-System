@@ -249,25 +249,34 @@ export const BookingManagement = ({
   return (
     <div className="space-y-5 sm:space-y-6 pb-12">
       {/* Top Header with Theme Banner */}
-      <div className="p-4 sm:p-5 rounded-2xl theme-banner-vehicles shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 animate-page-enter">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#D31720]/15 text-[#D31720] text-[11px] font-bold mb-1 border border-[#D31720]/30">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D31720] animate-ping" />
-            Live Dispatch Operations
+      <div className="p-3.5 sm:p-4 rounded-2xl theme-banner-vehicles shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 animate-page-enter relative overflow-hidden group">
+        {/* Subtle Ambient Color Glow & Specular Line */}
+        <div className="absolute -top-10 -right-10 w-36 h-36 bg-gradient-to-br from-red-500/15 via-[#D31720]/10 to-transparent rounded-full blur-2xl pointer-events-none animate-pulse" />
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#D31720]/35 to-transparent pointer-events-none" />
+
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#D31720]/15 via-red-50 to-[#D31720]/10 text-[#D31720] text-[10px] font-extrabold uppercase tracking-wider mb-1 border border-[#D31720]/30 shadow-2xs">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D31720] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D31720]"></span>
+            </span>
+            <span>Live Dispatch Operations</span>
           </div>
-          <h2 className="text-lg sm:text-2xl font-black bg-gradient-to-r from-[#D31720] via-red-600 to-red-600 bg-clip-text text-transparent tracking-tight flex items-center gap-2">
-            <CalendarClock className="w-5 h-5 sm:w-6 sm:h-6 text-[#D31720]" />
+          <h2 className="text-sm sm:text-base md:text-lg font-black bg-gradient-to-r from-[#D31720] via-red-700 to-[#7D0B12] bg-clip-text text-transparent tracking-tight flex items-center gap-2">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-[#D31720] to-[#9B1017] text-white flex items-center justify-center shadow-xs shadow-[#D31720]/25 shrink-0">
+              <CalendarClock className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+            </div>
             <span>Trip & Booking Operations</span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 font-medium italic">
+          <p className="text-[11px] sm:text-xs text-slate-600 font-medium italic mt-0.5">
             Dispatch cabs across Tamil Nadu, track live trips, calculate tariffs, and issue official travel slips
           </p>
         </div>
         <button
           onClick={handleOpenAdd}
-          className="px-4 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-[#D31720] to-[#9B1017] hover:brightness-105 text-white font-bold text-xs sm:text-sm active:scale-95 transition-all shadow-[0_4px_16px_rgba(211,23,32,0.35)] border border-white/30 flex items-center gap-2 self-start sm:self-auto"
+          className="px-3.5 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-[#D31720] to-[#9B1017] hover:brightness-105 text-white font-bold text-xs active:scale-95 transition-all shadow-sm shadow-[#D31720]/25 border border-white/30 flex items-center gap-1.5 self-start sm:self-auto relative z-10"
         >
-          <Plus className="w-4 h-4 stroke-[3]" />
+          <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
           <span>New Trip Booking</span>
         </button>
       </div>
