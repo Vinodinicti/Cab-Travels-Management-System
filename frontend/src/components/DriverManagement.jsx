@@ -210,8 +210,8 @@ export const DriverManagement = ({
                   {/* Driver Header Row: Avatar, Full Name & Rating, Duty Badge */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                      {/* Glossy Avatar with Initials */}
-                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#051A2D] to-[#0A2F50] border-2 border-white/80 flex items-center justify-center text-white font-black text-sm shrink-0 shadow-md ring-2 ring-[#051A2D]/10">
+                      {/* Glossy Red & White Avatar with Initials */}
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D31720] via-red-600 to-[#9B1017] border-2 border-white flex items-center justify-center text-white font-black text-sm shrink-0 shadow-md shadow-[#D31720]/30 ring-2 ring-[#D31720]/25">
                         {driver.name ? driver.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'CP'}
                       </div>
                       
@@ -245,7 +245,7 @@ export const DriverManagement = ({
                     </div>
 
                     <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 border border-slate-200/70">
-                      <ShieldAlert className="w-3.5 h-3.5 text-[#051A2D] shrink-0" />
+                      <ShieldAlert className="w-3.5 h-3.5 text-[#D31720] shrink-0" />
                       <span className="text-slate-900 font-mono font-bold text-[11px]">
                         DL: {driver.licenseNumber}
                       </span>
@@ -272,7 +272,7 @@ export const DriverManagement = ({
                           {vehModel}
                         </span>
                         {vehPlate && (
-                          <span className="font-mono font-black text-xs px-2.5 py-0.5 rounded-md bg-white border border-[#D31720]/40 text-[#051A2D] shadow-xs tracking-wider">
+                          <span className="font-mono font-black text-xs px-2.5 py-0.5 rounded-md bg-white border border-[#D31720]/40 text-[#D31720] shadow-xs tracking-wider">
                             {vehPlate}
                           </span>
                         )}
