@@ -697,3 +697,5 @@ app.post("/api/reset-demo", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Cab & Travels Management System API running at http://localhost:${PORT}`);
 });
+
+export default app;
